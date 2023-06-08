@@ -4,7 +4,8 @@ class CookieClicker {
         this.milsec = milsec;
         this.allowBuying = {
             products: true,
-            upgrades: true
+            upgrades: true,
+            techUpgrades: true
         };
         this.logging = true;
         this.styling = `
@@ -29,8 +30,9 @@ class CookieClicker {
             Game.ClickCookie();
             this.logger(`%c🍪 *click* `);
             this.findShimmer();
-            this.buyCheapestUpgrade();
-            this.buyMostExpensiveProduct();
+            this.buyTechUpgrades();
+            this.buyUpgrades();
+            this.buyProducts();
             this.playWizardGame();
         }
     }
@@ -47,28 +49,44 @@ class CookieClicker {
         }
     }
 
-    buyCheapestUpgrade() {
+    buyUpgrades() {
         if (!this.allowBuying.upgrades) return;
         const upgrades = document.querySelector('#upgrades')?.children;
-        if (upgrades.length > 0) upgrades[0].click();
+        if (upgrades.length > 0) {
+            if (upgrades[0].innerText === 'Buy all upgrades') {
+                upgrades[0].childNodes[0].click();
+            } else {
+                upgrades[0].click();
+            }
+        }
     }
 
-    buyMostExpensiveProduct() {
+    buyProducts() {
         if (!this.allowBuying.products) return;
         const products = document.querySelectorAll(".product:not(.locked):not(.disabled)");
         if (products.length > 0) {
             const product = products[products.length - 1];
-            this.logger(`%cBuying ${product.children[2].children[1].innerHTML}`);
+            this.logger(`%cBuying ${product.children[2].children[1].innerText}`);
             product.children[0].click();
         }
     }
 
+    buyTechUpgrades() {
+        if (!this.allowBuying.techUpgrades) return;
+        const techUpgrades = document.querySelector('#techUpgrades');
+        if (techUpgrades.length > 0) {
+            this.logger(`%cBuying ${techUpgrades.childNodes[0].innerText}`);
+            techUpgrades.childNodes[0].click();
+        }
+    }
+
     playWizardGame() {
-        const mana = +document.querySelector('#grimoireBarText').innerHTML.split(' ')[0].split('/')[0];
+        const mana = +document.querySelector('#grimoireBarText')?.innerText.split(' ')[0].split('/')[0];
         const handOfFate = document.querySelector('#grimoireSpell1');
-        const handOfFateCost = +handOfFate.childNodes[1].innerText;
+        const handOfFateCost = +handOfFate?.childNodes[1].innerText;
         if (mana >= handOfFateCost) {
             handOfFate.click();
+            this.logger(`%cCasting Hand of Fate!🤙👌`);
         }
     }
 
