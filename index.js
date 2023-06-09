@@ -74,19 +74,25 @@ class CookieClicker {
     buyTechUpgrades() {
         if (!this.allowBuying.techUpgrades) return;
         const techUpgrades = document.querySelector('#techUpgrades');
-        if (techUpgrades.length > 0) {
+        if (techUpgrades.children.length > 0) {
             this.logger(`%cBuying ${techUpgrades.childNodes[0].innerText}`);
             techUpgrades.childNodes[0].click();
+            const confirm = document.querySelector('#promptOption0');
+            if (confirm) confirm.click();
         }
     }
 
     playWizardGame() {
+        const wizardGrimoireMenu = document.querySelector(`#productMinigameButton7`);
+        if (!wizardGrimoireMenu.parentNode.parentNode.classList.contains('onMinigame')) {
+            wizardGrimoireMenu.click();
+        }
         const mana = +document.querySelector('#grimoireBarText')?.innerText.split(' ')[0].split('/')[0];
         const handOfFate = document.querySelector('#grimoireSpell1');
         const handOfFateCost = +handOfFate?.childNodes[1].innerText;
         if (mana >= handOfFateCost) {
-            handOfFate.click();
             this.logger(`%cCasting Hand of Fate!🤙👌`);
+            handOfFate.click();
         }
     }
 
