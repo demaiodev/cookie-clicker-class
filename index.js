@@ -98,7 +98,7 @@ class CookieClicker {
 
     toggleUpgradeBuying() {
         this.allowBuying.upgrades = !this.allowBuying.upgrades;
-        this.logger(`%cYou have set upgrade buying to ${this.allowBuying.products}`);
+        this.logger(`%cYou have set upgrade buying to ${this.allowBuying.upgrades}`);
     }
 
     toggleProductBuying() {
